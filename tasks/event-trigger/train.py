@@ -26,10 +26,7 @@ from src.models.event_trigger import (
     LeadingContextBart, EventBart, LeadingPlusEventBart, LeadingToEventsBart,
     EventLM,
     LeadingSbertBart, EventSbertBart, EventLMSbert, EventLMSbertNoCM,
-    LeadingContextGPT2, EventGPT2, LeadingPlusEventGPT2, LeadingToEventsGPT2,
     LeadingContextHINT, EventHINT, LeadingPlusEventHINT,
-    LeadingContextPlanAW, EventPlanAW, LeadingPlusEventPlanAW, LeadingToEventsPlanAW,
-    LeadingContextT5, EventT5, LeadingPlusEventT5, LeadingToEventsT5
 )
 from src.utils.wrapper import print_done
 from src.utils.string_utils import are_same_strings
@@ -80,24 +77,24 @@ class EventTriggerTrainer(BasicPLTrainer):
             self.model: EventLMSbert = EventLMSbert(args)
         elif are_same_strings(args.model_name, "event-lm-sbert-no-cm"):
             self.model: EventLMSbertNoCM = EventLMSbertNoCM(args)
-        # ============= gpt2 ===============
-        elif are_same_strings(args.model_name, "leading-gpt2"):
-            self.model: LeadingContextGPT2 = LeadingContextGPT2(args)
-        elif are_same_strings(args.model_name, "event-gpt2"):
-            self.model: EventGPT2 = EventGPT2(args)
-        elif are_same_strings(args.model_name, "leading-plus-event-gpt2"):
-            self.model: LeadingPlusEventGPT2 = LeadingPlusEventGPT2(args)
-        elif are_same_strings(args.model_name, "leading-to-events-gpt2"):
-            self.model: LeadingToEventsGPT2 = LeadingToEventsGPT2(args)
+        # # ============= gpt2 ===============
+        # elif are_same_strings(args.model_name, "leading-gpt2"):
+        #     self.model: LeadingContextGPT2 = LeadingContextGPT2(args)
+        # elif are_same_strings(args.model_name, "event-gpt2"):
+        #     self.model: EventGPT2 = EventGPT2(args)
+        # elif are_same_strings(args.model_name, "leading-plus-event-gpt2"):
+        #     self.model: LeadingPlusEventGPT2 = LeadingPlusEventGPT2(args)
+        # elif are_same_strings(args.model_name, "leading-to-events-gpt2"):
+        #     self.model: LeadingToEventsGPT2 = LeadingToEventsGPT2(args)
         # ============= t5 ===============
-        elif are_same_strings(args.model_name, "leading-t5"):
-            self.model: LeadingContextT5 = LeadingContextT5(args)
-        elif are_same_strings(args.model_name, "event-t5"):
-            self.model: EventT5 = EventT5(args)
-        elif are_same_strings(args.model_name, "leading-plus-event-t5"):
-            self.model: LeadingPlusEventT5 = LeadingPlusEventT5(args)
-        elif are_same_strings(args.model_name, "leading-to-events-t5"):
-            self.model: LeadingToEventsT5 = LeadingToEventsT5(args)
+        # elif are_same_strings(args.model_name, "leading-t5"):
+        #     self.model: LeadingContextT5 = LeadingContextT5(args)
+        # elif are_same_strings(args.model_name, "event-t5"):
+        #     self.model: EventT5 = EventT5(args)
+        # elif are_same_strings(args.model_name, "leading-plus-event-t5"):
+        #     self.model: LeadingPlusEventT5 = LeadingPlusEventT5(args)
+        # elif are_same_strings(args.model_name, "leading-to-events-t5"):
+        #     self.model: LeadingToEventsT5 = LeadingToEventsT5(args)
         # ============= hint ===============
         elif are_same_strings(args.model_name, "leading-hint"):
             self.model: LeadingContextHINT = LeadingContextHINT(args)
@@ -105,15 +102,15 @@ class EventTriggerTrainer(BasicPLTrainer):
             self.model: EventHINT = EventHINT(args)
         elif are_same_strings(args.model_name, "leading-plus-event-hint"):
             self.model: LeadingPlusEventHINT = LeadingPlusEventHINT(args)
-        # ============= planaw ===============
-        elif are_same_strings(args.model_name, "leading-planaw"):
-            self.model: LeadingContextPlanAW = LeadingContextPlanAW(args)
-        elif are_same_strings(args.model_name, "event-planaw"):
-            self.model: EventPlanAW = EventPlanAW(args)
-        elif are_same_strings(args.model_name, "leading-plus-event-planaw"):
-            self.model: LeadingPlusEventPlanAW = LeadingPlusEventPlanAW(args)
-        elif are_same_strings(args.model_name, "leading-to-events-planaw"):
-            self.model: LeadingToEventsPlanAW = LeadingToEventsPlanAW(args)
+        # # ============= planaw ===============
+        # elif are_same_strings(args.model_name, "leading-planaw"):
+        #     self.model: LeadingContextPlanAW = LeadingContextPlanAW(args)
+        # elif are_same_strings(args.model_name, "event-planaw"):
+        #     self.model: EventPlanAW = EventPlanAW(args)
+        # elif are_same_strings(args.model_name, "leading-plus-event-planaw"):
+        #     self.model: LeadingPlusEventPlanAW = LeadingPlusEventPlanAW(args)
+        # elif are_same_strings(args.model_name, "leading-to-events-planaw"):
+        #     self.model: LeadingToEventsPlanAW = LeadingToEventsPlanAW(args)
         else:
             raise NotImplementedError(f"args.model_name: {args.model_name}")
 
