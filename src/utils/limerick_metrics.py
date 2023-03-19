@@ -2,13 +2,12 @@ import json
 from phonemizer.separator import Separator
 from phonemizer.backend import FestivalBackend, EspeakBackend
 import re
-import matplotlib.pyplot as plt
 
 # Usage - use eval for single limerick or eval batch (quicker) for list of limericks
 # Each limerick is a list of 5 lines
 
 class LimerickEvaluator:
-  def __init__(self):
+  def __init__(self, n_jobs = 4):
     self.festival = FestivalBackend('en-us')
     self.espeak = EspeakBackend('en-us', with_stress=True)
     
@@ -18,13 +17,39 @@ class LimerickEvaluator:
     self.non_rhyme_pairs = [(0, 2), (0, 3)]
     self.desired_syllables = [8,8,5,5,8]
     self.desired_stress = [3,3,2,2,3]
+
+    self.n_jobs = n_jobs
     
+  
+  # Main function for EtriCA test.py
+  def etrica(self, src_lines, pred_lines, metrics):
+    wrong_lines = 0
+    limericks = []
+    for s, p in zip(src_lines, pred_lines):
+      l = p.split(".")
+      if len(l) != 5 or len(l[-1]) != 0:
+        wrong_lines += 1
+      else:
+        limericks.append([s] + l[:4])
+    
+    metrics["limerick-length-error"] = wrong_lines / len(src_lines)
+    metrics["limerick-rhyme"] = 0
+    metrics["limerick-syllable"] = 0
+    metrics["limerick-stress"] = 0
+
+    l_metrics = self.eval_batch(limericks)
+    for l in l_metrics:
+      for k,v in l.items():
+        metrics[k] += v/len(limericks)
+        
+    
+  
   # Get phonemes for list of strings using specified encoder
   def phonemes(self, data, backend="festival"):
     if backend=="festival":
-      return self.festival.phonemize(data, separator=self.sep, strip=True)
+      return self.festival.phonemize(data, separator=self.sep, strip=True, njobs = self.n_jobs)
     if backend=="espeak":
-      return self.espeak.phonemize(data, separator=self.sep, strip=True)
+      return self.espeak.phonemize(data, separator=self.sep, strip=True, njobs = self.n_jobs)
     
   # Evaluate single limerick
   def eval(self, limerick):
@@ -49,7 +74,11 @@ class LimerickEvaluator:
     rhyme_err = self.rhyming_error_metric(phones_festival)
     stress_err = self.stress_error_metric(phones_espeak)
 
-    return rhyme_err + syl_err/10 + stress_err/10
+    return {
+      "limerick-rhyme": rhyme_err,
+      "limerick-syllable": syl_err,
+      "limerick-stress": stress_err
+    }
 
   # Calculate how close the line lengths (in syllables) is to desired lengths
   # Uses festival encoding for syllable breaks

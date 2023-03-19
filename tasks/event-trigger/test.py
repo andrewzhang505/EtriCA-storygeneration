@@ -22,6 +22,8 @@ from src.utils.file_utils import copy_file_or_dir, output_obj_to_file, pickle_sa
 from src.utils import nlg_eval_utils
 from train import EventTriggerTrainer
 
+from src.utils.limerick_metrics import LimerickEvaluator
+
 
 class EventTriggerTester(EventTriggerTrainer):
     def __init__(self, args):
@@ -47,6 +49,8 @@ class EventTriggerTester(EventTriggerTrainer):
         self.test_output_store_path = self.cache_dir.joinpath(f"{self.output_prefix}_test_output.pkl")
         self.gen_file = self.generation_dir / f"{self.output_prefix}_gen.txt"
         self.eval_file = self.generation_dir / f"{self.output_prefix}_eval.txt"
+
+        self.lim_eval = LimerickEvaluator()
 
 
     def test(self, ckpt_path=None):
@@ -103,6 +107,12 @@ class EventTriggerTester(EventTriggerTrainer):
         metrics.update(**rouge_metrics)
         # calculate repetition and distinction
         nlg_eval_utils.repetition_distinction_metric(pred_lines_toks, metrics=metrics, repetition_times=2)
+        
+        # Limerick metrics
+        with open(self.src_file, "r") as f:
+            src_lines = f.readlines()
+        self.lim_eval.etrica(src_lines, pred_lines, metrics)
+        
         key = sorted(metrics.keys())
         for k in key:
             print(k, metrics[k])
