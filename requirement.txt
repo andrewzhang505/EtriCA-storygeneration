@@ -3,9 +3,12 @@ rouge_score
 transformers==4.19.4
 pytorch_transformers
 pytorch_lightning==1.6.0
-fairseq
+fairseq==0.10.2
 spacy
 scipy
 pandas
 tensorboardX
 phonemizer
+omegaconf==2.1.2
+hydra-core==1.0.3
+torch==1.11.0
