@@ -7,7 +7,7 @@ import re
 # Each limerick is a list of 5 lines
 
 class LimerickEvaluator:
-  def __init__(self, n_jobs = 4):
+  def __init__(self, n_jobs = 4, line_sep = "."):
     self.festival = FestivalBackend('en-us')
     self.espeak = EspeakBackend('en-us', with_stress=True)
     
@@ -19,14 +19,18 @@ class LimerickEvaluator:
     self.desired_stress = [3,3,2,2,3]
 
     self.n_jobs = n_jobs
+    self.line_sep = line_sep
+    self.regex = re.compile('[^a-zA-Z 0-9\']')
     
-  
+  def clean_line(self, x):
+    return self.regex.sub('', x)
+
   # Main function for EtriCA test.py
   def etrica(self, src_lines, pred_lines, metrics):
     wrong_lines = 0
     limericks = []
     for s, p in zip(src_lines, pred_lines):
-      l = p.split(".")
+      l = p.split(self.line_sep)
       if len(l) != 5 or len(l[-1]) != 0:
         wrong_lines += 1
       else:
@@ -53,6 +57,7 @@ class LimerickEvaluator:
     
   # Evaluate single limerick
   def eval(self, limerick):
+    limerick = [self.clean_line(x) for x in limerick]
     phones_festival = self.phonemes(limerick, "festival")
     phones_espeak = self.phonemes(limerick, "espeak")
 
@@ -61,7 +66,7 @@ class LimerickEvaluator:
   # Evaluate list of limericks
   def eval_batch(self, limericks):
     n = len(limericks)
-    flat_list = [item for sublist in limericks for item in sublist]
+    flat_list = [self.clean_line(item) for sublist in limericks for item in sublist]
     phones_festival = self.phonemes(flat_list, "festival")
     phones_espeak = self.phonemes(flat_list, "espeak")
 

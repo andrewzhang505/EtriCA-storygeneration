@@ -50,7 +50,8 @@ class EventTriggerTester(EventTriggerTrainer):
         self.gen_file = self.generation_dir / f"{self.output_prefix}_gen.txt"
         self.eval_file = self.generation_dir / f"{self.output_prefix}_eval.txt"
 
-        self.lim_eval = LimerickEvaluator()
+        self.limerick_sep_token = args.limerick_sep_token
+        self.lim_eval = LimerickEvaluator(line_sep=self.limerick_sep_token)
 
 
     def test(self, ckpt_path=None):
