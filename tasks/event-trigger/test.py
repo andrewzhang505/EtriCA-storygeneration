@@ -23,6 +23,7 @@ from src.utils import nlg_eval_utils
 from train import EventTriggerTrainer
 
 from src.utils.limerick_metrics import LimerickEvaluator
+from src.utils.limerick_rhyme_augmenter import RhymeAugmenter
 
 
 class EventTriggerTester(EventTriggerTrainer):
@@ -123,10 +124,39 @@ class EventTriggerTester(EventTriggerTrainer):
         output_obj_to_file(json.dumps(metrics, indent=4), self.eval_file)
         return metrics
 
+    def augment_rhymes(self):
+        aug = RhymeAugmenter()
+
+        with open(self.src_file, "r") as f:
+            src_lines = f.readlines()
+        pred_lines = self.test_output["preds"]
+
+        with open(self.gen_file, 'w') as f:
+            for i, (s, p) in enumerate(zip(src_lines, pred_lines)):
+                l = p.split(self.limerick_sep_token)
+                if len(l) != 5 or len(l[-1]) != 0:
+                    pass
+                else:
+                    l_words = [x.split(" ") for x in l[:4]]
+                    s_word = s.strip().split(" ")[-2]
+
+                    l_words[0][-1] = aug.eval(s_word, l_words[0][-1])
+                    l_words[2][-1] = aug.eval(l_words[1][-1], l_words[2][-1])
+                    l_words[3][-1] = aug.eval(s_word, l_words[3][-1])
+
+                    l = [" ".join(x) for x in l_words]
+                f.write(". ".join(l) + ". \n")
+                print(i)
+
+
+
 if __name__ == '__main__':
     hparams = parse_args_for_config()
     tester = EventTriggerTester(hparams)
 
     # generate predicted stories
     tester.generate()
+    if hparams.limerick_augment_rhyme:
+        tester.augment_rhymes()
+
     tester.eval_output()

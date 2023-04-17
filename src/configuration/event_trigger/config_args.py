@@ -75,6 +75,7 @@ def add_customized_args(parser: argparse.ArgumentParser = None):
     parser.add_argument("--remain_sp_tokens", action="store_true", default=False,
                         help="remain special tokens in target and pred text (e.g. [EVENT_s])")
     parser.add_argument("--limerick_sep_token", type=str, default=".")
+    parser.add_argument("--limerick_augment_rhyme", action="store_true", default=False)
     return parser
 
 
