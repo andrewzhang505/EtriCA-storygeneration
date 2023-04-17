@@ -108,9 +108,11 @@ class LimerickEvaluator:
     p2 = phone2.split("-")
 
     if len(p1) < len(p2):
-      return p1[1:] == p2[len(p2)-len(p1)+1:]
+      base = p1[min(1, len(p1)-1):]
+      return base == p2[len(p2)-len(base):]
     else:
-      return p1[len(p1)-len(p2)+1:] == p2[1:]
+      base = p2[min(1, len(p2)-1):]
+      return base == p1[len(p1)-len(base):]
   
   # Calculate how close lines (in number of stressed syllables) are to desired
   def stress_error_metric(self, phones):

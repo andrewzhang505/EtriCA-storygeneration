@@ -12,11 +12,12 @@ class RhymeAugmenter:
         self.n_jobs = n_jobs  
     
     def eval(self, w1, w2):
-        syn = self.synonyms(w2)
+        syn = [w2] + self.synonyms(w2)
         phomenes = self.phonemes([w1] + syn)
         
         for i, w in enumerate(phomenes[1:]):
             if self.check_rhyme(phomenes[0], w):
+                print(f"{w1}, {syn[i]}")
                 return syn[i]
         return w2
 
@@ -37,9 +38,11 @@ class RhymeAugmenter:
         p2 = phone2.split("-")
 
         if len(p1) < len(p2):
-            return p1[1:] == p2[len(p2)-len(p1)+1:]
+            base = p1[min(1, len(p1)-1):]
+            return base == p2[len(p2)-len(base):]
         else:
-            return p1[len(p1)-len(p2)+1:] == p2[1:]
+            base = p2[min(1, len(p2)-1):]
+            return base == p1[len(p1)-len(base):]
     
     
 

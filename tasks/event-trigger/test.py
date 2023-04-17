@@ -131,6 +131,8 @@ class EventTriggerTester(EventTriggerTrainer):
             src_lines = f.readlines()
         pred_lines = self.test_output["preds"]
 
+        num_change = 0
+
         with open(self.gen_file, 'w') as f:
             for i, (s, p) in enumerate(zip(src_lines, pred_lines)):
                 l = p.split(self.limerick_sep_token)
@@ -140,13 +142,18 @@ class EventTriggerTester(EventTriggerTrainer):
                     l_words = [x.split(" ") for x in l[:4]]
                     s_word = s.strip().split(" ")[-2]
 
-                    l_words[0][-1] = aug.eval(s_word, l_words[0][-1])
-                    l_words[2][-1] = aug.eval(l_words[1][-1], l_words[2][-1])
-                    l_words[3][-1] = aug.eval(s_word, l_words[3][-1])
+                    base = [s_word, l_words[1][-1], s_word]
+                    target = [0, 2, 3]
+
+                    for b, t in zip(base, target):
+                        change = aug.eval(b, l_words[t][-1])
+                        if change != l_words[t][-1]:
+                            num_change += 1
+                            l_words[t][-1] = change
 
                     l = [" ".join(x) for x in l_words]
                 f.write(". ".join(l) + ". \n")
-                print(i)
+                print(f"Limerick: {i}, total change: {num_change}")
 
 
 
