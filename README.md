@@ -10,7 +10,7 @@ First, clean the raw data from whatever source and put it in the format of one s
 Second, Use the preprocess.ipynb notebook script in the preprocessing folder to process your raw data into Etrica_input and HINT_input files. Will need to import the event_anotator.py file from original EtriCA.
 
 ### Training
-...
+Run the commands in `python_commands_for_EtriCA.sh`. See original README below for more details.
 
 # EtriCA-storygeneration
 This repository is the code and resources for the paper [EtriCA: Event-Triggered Context-Aware Story Generation Augmented by Cross Attention](https://arxiv.org/abs/2210.12463) 
