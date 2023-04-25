@@ -1,3 +1,17 @@
+# EtriCA implementation on Limericks
+Work done by Group 49: Andrew Zhang, Zhiyang Xu, Linkai Shao, Ruijie Rao, Chi San Chen
+## Project Abstract
+This project presents the implementation of the Event-Triggered Context-Aware Story Generation Model Augmented by Cross Attention on Limericks (EtriCA) for generating context-aware limericks. EtriCA is a neural network-based model proposed by Li et al. (2020) that utilizes an event sequence and context information to generate limericks with cross-attention mechanism. We implemented EtriCA and further augmented it with a rhyme scheme to improve the generation of rhyming limericks. The paper discusses the model's architecture, training, and testing procedures. Our experimental results show that the augmented model is capable of generating limericks with reasonable coherence and some level of rhyming patterns, although there is still room for improvement. Overall, this work demonstrates the potential of EtriCA for generating context-aware limericks and serves as a starting point for further research in this area.
+
+## How to Reproduce
+### Preprocessing data
+First, clean the raw data from whatever source and put it in the format of one story/limerick per line, with white space as the separation. Make sure that the length of each story/limerick is not too long, and the number of separation is about 5.
+
+Second, Use the preprocess.ipynb notebook script in the preprocessing folder to process your raw data into Etrica_input and HINT_input files. Will need to import the event_anotator.py file from original EtriCA.
+
+### Training
+...
+
 # EtriCA-storygeneration
 This repository is the code and resources for the paper [EtriCA: Event-Triggered Context-Aware Story Generation Augmented by Cross Attention](https://arxiv.org/abs/2210.12463) 
 
